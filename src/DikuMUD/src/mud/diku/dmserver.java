@@ -128,6 +128,7 @@ public class dmserver extends APropertiesObject {
                             key = "data";
                             break;
                         case "p":
+                            // Define Port ad-hoc
                             key = "port";
                             break;
                         default:

@@ -33,6 +33,14 @@ public class dmserver extends APropertiesObject {
             log.LogInfo("Entering OnStartup method....");
             OnStartup(args);
 
+            log.LogInfo(">>> Opening Socket to accept connection....");
+
+            var inet = listener.getInetAddress();
+            var host = inet.getHostName();
+            var addr = inet.getHostAddress();
+            var chost = inet.getCanonicalHostName();
+            log.LogConfig("Host: " + host + "; INet_Addr: " + addr + "; Canonical HostName: " + chost);
+
     }
 
     /**
@@ -50,6 +58,11 @@ public class dmserver extends APropertiesObject {
             log.LogInfo("Entering ParseArguments method....");
             ParseArguments(args);
         }
+
+        // Initialize Server
+        log.LogInfo("Initializing ServerSocket....");
+        listener = InitSocket();
+
     }
 
     private static void ParseArguments(String[] args) {
@@ -96,6 +109,50 @@ public class dmserver extends APropertiesObject {
                     var val = (String) arg.substring(idx + 1);
                     SettingsHelper.SetKeyValue(key, val);
                     break;
+            }
+        }
+    }
+
+    private static void OnShutdown() throws IOException {
+        // Save Custom Properties
+        // Save Other File(s)
+        // Log Shutdown Information
+        log.LogInfo("Server SHUTDOWN!!!");
+        listener.close();
+        System.exit(0);
+    }
+
+    private static ServerSocket InitSocket() throws IOException {
+        // Initialize New Socket
+        return new ServerSocket(SettingsHelper.Port(), 0, InetAddress.getLoopbackAddress());
+    }
+
+    private static void RunServer() throws IOException, ClassNotFoundException {
+        boolean exit = true; // TODO: change to False to test connectivity
+        while (!exit) {
+            // Create Socket and waiting for client connection
+            try (var s = listener.accept()) {
+                log.LogInfo("Accepting Socket connections....");
+                String msg = "";
+
+                try (var pw = new PrintWriter(s.getOutputStream(), true);
+                        var br = new BufferedReader(new InputStreamReader(s.getInputStream()))) {
+
+                    // Write back to the client
+                    pw.println("Welcome to ServerSocket! \r\n Text >");
+
+                    // Read from the client
+                    log.LogInfo("Creating Input Stream from Client...");
+                    msg = br.readLine();
+
+                    log.LogInfo("Message received: " + msg);
+                    pw.println("Message received: " + msg);
+                }
+
+                if (msg.equalsIgnoreCase("exit")) {
+                    log.LogInfo("Closing Socket...");
+                    exit = true;
+                }
             }
         }
     }

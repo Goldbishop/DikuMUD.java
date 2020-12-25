@@ -51,6 +51,10 @@ public class dmserver extends APropertiesObject {
      * @param args
      */
     private static void OnStartup(String[] args) throws IOException {
+        // Load Resources
+        log.LogInfo("Loading Configuration....");
+        LoadConfiguration();
+
         // Check args length
         if (args.length < 1) {
             log.LogInfo(String.format("args is empty!"));
@@ -63,6 +67,12 @@ public class dmserver extends APropertiesObject {
         log.LogInfo("Initializing ServerSocket....");
         listener = InitSocket();
 
+    private static void LoadConfiguration() {
+        // Load Default properties (default.properties)
+
+        /**
+         * *** Load Custom Properties ****
+         */
     }
 
     private static void ParseArguments(String[] args) {

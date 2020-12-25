@@ -19,6 +19,16 @@ public class ServerProperties extends ALoggingObject {
     // _default is only used for internal acquisition of default settings
     //    and as a basis for modification for the Run-Time Custom Settings
     private final static Properties _default = LoadDefaultProperties();
+    // _settings is the Run-Time Settings for the server
+    private final static Properties _settings = LoadCustomProperties();
+
+    public static String Properties(String key){
+        return _settings.getProperty(key);
+    }
+    public static Properties Properties() {
+        return _settings;
+    }
+
     /**
      * *
      * URL:
@@ -46,4 +56,18 @@ public class ServerProperties extends ALoggingObject {
         return props;
     }
 
+    private static Properties LoadCustomProperties() {
+        // Load Custom Property Settings
+        var props = new Properties(_default);
+
+        try {
+            try (var fin = new FileInputStream("./dmserver.properties")) {
+                props.load(fin);
+            }
+        } catch (Exception exc) {
+            log.LogSevere(exc.getMessage());
+        }
+
+        return props;
+    }
 }

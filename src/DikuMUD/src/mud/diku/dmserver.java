@@ -25,6 +25,8 @@ import mud.diku.utilities.SettingsHelper;
 @SuppressWarnings("static-access")
 public class dmserver extends APropertiesObject {
 
+    private static ServerSocket listener;
+
     /**
      * @param args the command line arguments
      */
@@ -41,6 +43,19 @@ public class dmserver extends APropertiesObject {
             var chost = inet.getCanonicalHostName();
             log.LogConfig("Host: " + host + "; INet_Addr: " + addr + "; Canonical HostName: " + chost);
 
+            /**
+             * ** Run Loop ***
+             */
+            log.LogInfo("Entering RunServer Logic....");
+            RunServer();
+
+            // Post-Run Cleanup
+            log.LogInfo("Entering OnShutdown method....");
+            OnShutdown();
+        } catch (Exception exc) {
+            // End all Be-All CATCH'er
+            log.LogSevere(exc);
+        }
     }
 
     /**

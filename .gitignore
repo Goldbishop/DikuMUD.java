@@ -1,6 +1,5 @@
 # Build-base operations
 build/
-dist/
 *.class
 
 # Log file

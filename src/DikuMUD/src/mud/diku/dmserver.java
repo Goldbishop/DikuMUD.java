@@ -32,6 +32,7 @@ public class dmserver extends APropertiesObject {
      */
     public static void main(String[] args) {
         try {// Pre-Run Setup
+            log.LogSevere("===== START LOGGING:  =====");
             log.LogInfo("Entering OnStartup method....");
             OnStartup(args);
 
@@ -149,6 +150,7 @@ public class dmserver extends APropertiesObject {
         // Save Other File(s)
         // Log Shutdown Information
         log.LogInfo("Server SHUTDOWN!!!");
+        log.LogSevere("===== END LOGGING =====");
         listener.close();
         System.exit(0);
     }

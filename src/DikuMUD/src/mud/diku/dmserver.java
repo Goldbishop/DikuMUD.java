@@ -6,14 +6,11 @@
 package mud.diku;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import mud.diku.objects.APropertiesObject;
 import mud.diku.utilities.DatabaseHelper;

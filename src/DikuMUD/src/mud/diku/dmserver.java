@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import mud.diku.objects.APropertiesObject;
+import mud.diku.utilities.DatabaseHelper;
 import mud.diku.utilities.SettingsHelper;
 
 /**
@@ -26,6 +27,7 @@ import mud.diku.utilities.SettingsHelper;
 public class dmserver extends APropertiesObject {
 
     private static ServerSocket listener;
+    private static DatabaseHelper database;
 
     /**
      * @param args the command line arguments
@@ -85,15 +87,7 @@ public class dmserver extends APropertiesObject {
 
         // Boot Database File(s); Mob, Object, Zone, etc.
         log.LogInfo("Entering BootDatabase method....");
-        BootDatabase();
-    }
-
-    private static void LoadConfiguration() {
-        // Load Default properties (default.properties)
-
-        /**
-         * *** Load Custom Properties ****
-         */
+        database.BootDatabase();
     }
 
     private static void ParseArguments(String[] args) {
@@ -160,25 +154,6 @@ public class dmserver extends APropertiesObject {
         return new ServerSocket(SettingsHelper.Port(), 0, InetAddress.getLoopbackAddress());
     }
 
-    private static void BootDatabase() {
-        log.LogInfo("### Booting Database ###");
-        var datadir = CheckDirectory();
-
-        // Read Files in Data Directory
-        log.LogInfo("*** Capturing Data Files ***");
-
-        var fldr = new File(datadir);
-        String[] arrFiles = fldr.list();
-
-        if (arrFiles == null) {
-            log.LogWarning("Files Array has not been filled");
-        } else {
-            for (var file : arrFiles) {
-                log.LogInfo("File Found: " + file);
-            }
-        }
-    }
-
     private static void RunServer() throws IOException, ClassNotFoundException {
         boolean exit = true; // TODO: change to False to test connectivity
         while (!exit) {
@@ -209,23 +184,4 @@ public class dmserver extends APropertiesObject {
         }
     }
 
-    private static String CheckDirectory() {
-        var datadir = SettingsHelper.GetDataDirectory();
-        var path = Paths.get(datadir);
-
-        // Check if Directory/path exists
-        log.LogInfo("*** Checking Data Directory ***");
-        if (!Files.isDirectory(path)) {
-            // Directory/Path does NOT exist
-            log.LogConfig("Data Directory (" + datadir + ") Does not Exist");
-            try {
-                Files.createDirectories(path);
-                log.LogConfig("Data Directory (" + datadir + ")....Created");
-            } catch (IOException ex) {
-                log.LogSevere(ex.getMessage());
-            }
-        }
-
-        return datadir;
-    }
 }

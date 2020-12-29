@@ -83,4 +83,12 @@ public class SettingsHelper extends APropertiesObject {
         log.LogInfo("(" + key + ") Argument set: " + val);
     }
 
+    public static void LoadConfiguration() {
+        // Load Default properties (default.properties)
+
+        /**
+         * *** Load Custom Properties ****
+         */
+    }
+
 }

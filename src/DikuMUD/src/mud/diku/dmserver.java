@@ -27,6 +27,7 @@ import mud.diku.utilities.SettingsHelper;
 public class dmserver extends APropertiesObject {
 
     private static ServerSocket listener;
+    private static SettingsHelper settings;
     private static DatabaseHelper database;
 
     /**
@@ -71,7 +72,7 @@ public class dmserver extends APropertiesObject {
     private static void OnStartup(String[] args) throws IOException {
         // Load Resources
         log.LogInfo("Loading Configuration....");
-        LoadConfiguration();
+        settings.LoadConfiguration();
 
         // Check args length
         if (args.length < 1) {
@@ -133,7 +134,7 @@ public class dmserver extends APropertiesObject {
                             break;
                     }
                     var val = (String) arg.substring(idx + 1);
-                    SettingsHelper.SetKeyValue(key, val);
+                    settings.SetKeyValue(key, val);
                     break;
             }
         }
